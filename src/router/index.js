@@ -33,7 +33,7 @@ const router = new VueRouter({
     { path: '/pay', component: payindex },
     // 动态路由，确定是哪个商品
     { path: '/prodetail/:id', component: prodetail },
-    { path: '/search/:id', component: searchIndex },
+    { path: '/search', component: searchIndex },
     { path: '/searchlist', component: SearchList }
   ]
 })
