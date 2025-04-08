@@ -2,6 +2,7 @@
 // 好处：不会污染原始的axios实例
 import axios from 'axios'
 import { Toast } from 'vant'
+import { getInfo } from '@/utils/Storage'
 const instance = axios.create({
   baseURL: 'http://smart-shop.itheima.net/index.php?s=/api',
   timeout: 5000,
@@ -17,6 +18,12 @@ instance.interceptors.request.use(function (config) {
     loadingType: 'spinner',
     duration: 0 // 当duration为0的时候loading不会自动消失
   })
+  // 每次请求的时候，把token带过去
+  const token = getInfo().token
+  if (token) {
+    config.headers['Access-Token'] = token
+    config.headers.platform = 'H5'
+  }
   return config
 }, function (error) {
   // 对请求错误做些什么
@@ -30,7 +37,7 @@ instance.interceptors.response.use(function (response) {
   const res = response.data
   if (res.status !== 200) {
     // 给出提示
-    Toast.fail(res.msg)
+    Toast.fail(res.message)
     // 抛出一个错误的promise，这样就可以被catch捕获
     return Promise.reject(new Error(res.msg))
   } else {

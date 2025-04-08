@@ -74,6 +74,7 @@ export default {
       // 请求成功后，倒计时开始
       await getMsgCode(this.picCode, this.picKey, this.mobile)
       this.$toast('获取短信验证码成功')
+
       this.second = this.totalSecond
       this.timer = setInterval(() => {
         this.second--
@@ -107,7 +108,10 @@ export default {
       this.$store.commit('user/setUserInfo',
         res.data)
       this.$toast('登录成功')
-      await this.$router.push('/')
+      // 进行判断，看是否有回调地址
+      // 如果有则需要回跳到回跳的地址
+      const url = this.$route.query.backUrl || '/'
+      await this.$router.replace(url)
     }
   },
   created () {
