@@ -3,9 +3,11 @@ import { getProComments, getProDetail } from '@/api/product'
 import defaultImg from '@/assets/default-avatar.png'
 import CountBox from '@/components/CountBox'
 import { addCart } from '@/api/cart'
+import loginConfirm from '@/mixins/loginConfrm'
 export default {
   name: 'ProDetail',
   components: { CountBox },
+  mixins: [loginConfirm],
   data () {
     return {
       images: [],
@@ -54,34 +56,29 @@ export default {
       this.mode = 'buyNow'
       this.showPannel = true
     },
+    // 登录确认框，根据登录状态，判断是否需要登录
+
     async addCart () {
-      // 判断token是否存在
-      if (!this.$store.getters.token) {
-        this.$dialog.confirm({
-          title: '温馨提示',
-          message: '您还未登录，请先登录',
-          confirmButtonText: '去登陆',
-          cancelButtonText: '再逛逛'
-        }).then(() => {
-          // 如果希望跳转到登录页面后能回来
-          // 要加上当前的页面地址
-          // this.$route.fullPath
-          this.$router.replace({
-            path: '/login',
-            query: {
-              backUrl: this.$route.fullPath
-            }
-          })
-        })
-        return
-      }
+      // 弹出确认框直接返回，不做下一步操作
+      if (this.loginConfirm()) return
+      // 添加到购物车
       const { data } = await addCart(this.goodsId, this.addCount, this.detail.skuList[0].goods_sku_id)
       this.cartTotal = data.cartTotal
       this.$toast('添加成功')
       this.showPannel = false
     },
     goBuyNow () {
-      console.log(1)
+      if (this.loginConfirm()) return
+      // 未登录：需要弹出确认框
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.goodsId,
+          goodsSkuId: this.detail.skuList[0].goods_sku_id,
+          goodsNum: this.addCount
+        }
+      })
     }
   }
 }

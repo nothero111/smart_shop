@@ -35,7 +35,18 @@ export default {
       await this.$store.dispatch('cart/delSelect')
       this.isEdit = false
     },
-    goPay () {},
+    goPay () {
+      if (this.selCount > 0) {
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'cart',
+            cartIds: this.selCartList.map(item => item.id)
+              .join(',')
+          }
+        })
+      }
+    },
     changeCount (goodsNum, goodsId, goodsSkuId) {
       this.$store.dispatch('cart/changeCountAction', {
         goodsNum,
