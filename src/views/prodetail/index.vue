@@ -25,9 +25,11 @@ export default {
       return this.$route.params.id
     }
   },
-  created () {
-    this.getDetail()
-    this.getComments()
+  async created () {
+    await this.getDetail()
+    await this.getComments()
+    const { data } = await addCart(this.goodsId, 0, this.detail.skuList[0].goods_sku_id)
+    this.cartTotal = data.cartTotal
   },
   methods: {
     onChange (index) {
