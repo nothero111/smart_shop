@@ -2,18 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 // 导入一级路由
-import Login from '@/views/login/index.vue'
+
 import layout from '@/views/layout/index.vue'
-import myorder from '@/views/myorder/index.vue'
-import payindex from '@/views/pay/index.vue'
-import prodetail from '@/views/prodetail/index.vue'
-import searchIndex from '@/views/search/index.vue'
-import SearchList from '@/views/search/list.vue'
 // 导入二级路由
 import home from '@/views/layout/home.vue'
 import category from '@/views/layout/category.vue'
 import cart from '@/views/layout/cart.vue'
 import user from '@/views/layout/user.vue'
+const Login = () => import('@/views/login/index.vue')
+const myorder = () => import('@/views/myorder/index.vue')
+const payindex = () => import('@/views/pay/index.vue')
+const prodetail = () => import('@/views/prodetail/index.vue')
+const searchIndex = () => import('@/views/search/index.vue')
+const SearchList = () => import('@/views/search/list.vue')
 Vue.use(VueRouter)
 const router = new VueRouter({
   routes: [
